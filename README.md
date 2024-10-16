@@ -4,7 +4,7 @@ Encore is an incredibly fast TS backend using a multi-threaded Rust core with ru
 
 ## notes
 
-- I wanted to try encore.ts to create a portable self contained sandbox.
+- I wanted to try encore.ts without installing onto my host server
 - This has been simply achieved with a dockerfile and a docker-compose
 - encore runs a service and a dashboard - by default it runs processes on 127.0.0.0 which is not exposed to docker.
 - "encore run --listen 0.0.0.0:4000" is used to expose the service

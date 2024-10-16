@@ -1,0 +1,19 @@
+# docker build -f dockerfile.bullseye -t syntapse/encore:bullseye .
+FROM node:18-bullseye-slim
+
+# Install curl, bash, wget, and other basic tools
+RUN apt-get update && apt-get install -y curl bash wget && rm -rf /var/lib/apt/lists/*
+
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Install Encore
+RUN curl -L https://encore.dev/install.sh | bash && \
+    echo 'export ENCORE_INSTALL="/root/.encore"' >> ~/.bashrc && \
+    echo 'export PATH="$ENCORE_INSTALL/bin:$PATH"' >> ~/.bashrc
+
+# Set the working directory
+WORKDIR /app
+
+## add socat
+RUN apt-get update && apt-get install -y socat openssh-client && rm -rf /var/lib/apt/lists/*

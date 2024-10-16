@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  encoredev:
+    image: syntapse/encore:bullseye
+    hostname: encoredev 
+    container_name: encoredev
+    ports:
+      - "4000:4000"
+      # socat TCP-LISTEN:9401,reuseaddr,fork TCP:127.0.0.1:9400
+      - "9400:9401"
+    volumes:
+      - ./app:/app
+    working_dir: /app/helloworld
+    command: sh -c "export PATH=\$PATH:/root/.encore/bin && encore run --listen 0.0.0.0:4000 & socat TCP-LISTEN:9401,reuseaddr,fork TCP:127.0.0.1:9400"

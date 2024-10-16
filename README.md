@@ -2,6 +2,8 @@
 
 Encore is an incredibly fast TS backend using a multi-threaded Rust core with run-time type safety [read more here](https://dev.to/encore/encorets-9x-faster-than-expressjs-3x-faster-than-bun-zod-4boe)
 
+[Umatched Node Performance powered by Rust](https://encore.dev/blog/encore-for-typescript#unmatched-node-performance-powered-by-rust)
+
 ## notes
 
 - I wanted to try encore.ts without installing onto my host server

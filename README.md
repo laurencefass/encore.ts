@@ -16,4 +16,4 @@ Encore is an incredibly fast TS backend using a multi-threaded Rust core with ru
 
 - encore needs gc installed in the container to install correctly
 - i tried alpine for a minimal image size but this doesnt use gc libraries and all attempts led to errors
-- the smallest image I could find is
+- the smallest image I could find was bullseye though would be good to reduce this further.

@@ -2,14 +2,13 @@ import {
   createHashRouter,
   Link,
   Outlet,
+  redirect,
   RouterProvider,
   useRouteError,
 } from "react-router-dom";
 
 import IndexPage from "./components/IndexPage.tsx";
-import StreamOutExample from "./components/StreamOutExample.tsx";
-import StreamInExample from "./components/StreamInExample.tsx";
-import StreamInOutExample from "./components/StreamInOutExample.tsx";
+import Chat from "./components/Chat.tsx";
 
 const router = createHashRouter([
   {
@@ -27,18 +26,17 @@ const router = createHashRouter([
             Component: IndexPage,
           },
           {
+            Component: Outlet,
+            loader: ({ request }) => {
+              const url = new URL(request.url);
+              const username = url.searchParams.get("name");
+              if (!username) return redirect("/");
+              return null;
+            },
             children: [
               {
-                path: "stream-in",
-                Component: StreamInExample,
-              },
-              {
-                path: "stream-out",
-                Component: StreamOutExample,
-              },
-              {
-                path: "stream-in-out",
-                Component: StreamInOutExample,
+                path: "chat",
+                Component: Chat,
               },
             ],
           },
@@ -58,11 +56,8 @@ function Layout() {
   return (
     <div>
       <header>
-        <nav className="flex items-center bg-black text-white p-4 space-x-4">
+        <nav className="flex items-center justify-between bg-black text-white p-4">
           <Link to="/">Home</Link>
-          <Link to="/stream-in">streamIn</Link>
-          <Link to="/stream-out">streamOut</Link>
-          <Link to="/stream-in-out">streamInOut</Link>
         </nav>
       </header>
 

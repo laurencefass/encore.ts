@@ -30,8 +30,7 @@ export function PreviewEnv(pr: number | string): BaseURL {
  * Client is an API client for the {{ENCORE_APP_ID}} Encore application.
  */
 export default class Client {
-  public readonly frontend: frontend.ServiceClient;
-  public readonly streaming: streaming.ServiceClient;
+  public readonly chat: chat.ServiceClient;
 
   /**
    * Creates a Client for calling the public and authenticated APIs of your Encore application.
@@ -41,8 +40,7 @@ export default class Client {
    */
   constructor(target: BaseURL, options?: ClientOptions) {
     const base = new BaseClient(target, options ?? {});
-    this.frontend = new frontend.ServiceClient(base);
-    this.streaming = new streaming.ServiceClient(base);
+    this.chat = new chat.ServiceClient(base);
   }
 }
 
@@ -63,56 +61,20 @@ export interface ClientOptions {
   };
 }
 
-export namespace frontend {
-  export class ServiceClient {
-    private baseClient: BaseClient;
-
-    constructor(baseClient: BaseClient) {
-      this.baseClient = baseClient;
-    }
-
-    public async assets(path: string[]): Promise<void> {
-      await this.baseClient.callAPI(
-        "HEAD",
-        `/${path.map(encodeURIComponent).join("/")}`,
-      );
-    }
-  }
-}
-
-export namespace streaming {
-  export interface DataChunk {
-    data: string;
-    done: boolean;
-  }
-
-  export interface Handshake {
-    user: string;
+export namespace chat {
+  export interface ChatMessage {
+    userID: string;
+    username: string;
+    msg: string;
   }
 
   export interface HandshakeRequest {
-    model: string;
+    id: string;
   }
 
-  export interface InMessage {
-    prompt: string;
-  }
-
-  export interface LogHandshake {
-    rows: number;
-  }
-
-  export interface LogMessage {
-    message: string;
-  }
-
-  export interface OutMessage {
-    message: string;
-    done: boolean;
-  }
-
-  export interface StreamEndResponse {
-    success: boolean;
+  export interface PostMessage {
+    username: string;
+    msg: string;
   }
 
   export class ServiceClient {
@@ -122,46 +84,15 @@ export namespace streaming {
       this.baseClient = baseClient;
     }
 
-    public async aiChatStream(
+    public async chat(
       params: HandshakeRequest,
-    ): Promise<StreamInOut<InMessage, OutMessage>> {
+    ): Promise<StreamInOut<PostMessage, ChatMessage>> {
       // Convert our params into the objects we need for the request
       const query = makeRecord<string, string | string[]>({
-        model: params.model,
+        id: params.id,
       });
 
-      return await this.baseClient.createStreamInOut(`/ai-chat`, { query });
-    }
-
-    /**
-     * Use api.streamOut when you need to stream data out from your backend.
-     * The Handshake object can be used to pass initial data, it's optional.
-     */
-    public async logStream(
-      params: LogHandshake,
-    ): Promise<StreamIn<LogMessage>> {
-      // Convert our params into the objects we need for the request
-      const query = makeRecord<string, string | string[]>({
-        rows: String(params.rows),
-      });
-
-      return await this.baseClient.createStreamIn(`/logs`, { query });
-    }
-
-    /**
-     * Use api.streamIn when you need to stream data into your backend.
-     * The Response object gets returned when the stream is done.
-     * The Handshake object can be used to pass initial data, it's optional.
-     */
-    public async uploadStream(
-      params: Handshake,
-    ): Promise<StreamOut<DataChunk, StreamEndResponse>> {
-      // Convert our params into the objects we need for the request
-      const query = makeRecord<string, string | string[]>({
-        user: params.user,
-      });
-
-      return await this.baseClient.createStreamOut(`/upload`, { query });
+      return await this.baseClient.createStreamInOut(`/chat`, { query });
     }
   }
 }

@@ -1,8 +1,10 @@
-# Encore.ts Streaming Examples
+# Encore.ts Streaming Chat Example
 
-This example showcases the different streaming APIs in Encore.ts: `api.streamIn`, `api.streamOut`, and `api.streamInOut`.
+This is an example of how to use the Streaming API in Encore.ts to create a WebSocket stream from a web frontend to a Encore.ts backend.
 
 Learn more in our [Streaming API docs](https://encore.dev/docs/ts/primitives/streaming-apis)
+
+![Chat app screenshot](./chat-room.png)
 
 ## Developing locally
 ### Prerequisite: Installing Encore
@@ -17,7 +19,7 @@ environment. Use the appropriate command for your system:
 When you have installed Encore, run to clone this example:
 
 ```bash
-encore app create --example=ts/streaming
+encore app create --example=ts/streaming-chat
 ```
 
 ## Running locally
@@ -25,7 +27,7 @@ encore app create --example=ts/streaming
 encore run
 ```
 
-While `encore run` is running, open <http://localhost:4000/> to view the frontend which has different pages for showcasing the different streaming endpoints.
+While `encore run` is running, open <http://localhost:4000/> to view the chat frontend. Open <http://localhost:4000/> in multiple tabs to see the chat in action. 
 
 You can also access Encore's [local developer dashboard](https://encore.dev/docs/observability/dev-dash) on <http://localhost:9400/> to view traces, API documentation, and more.
 

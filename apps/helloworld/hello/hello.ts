@@ -1,4 +1,5 @@
 import { api } from "encore.dev/api";
+import { formattedDate } from "@common/strings";
 
 // Welcome to Encore!
 // This is a simple "Hello World" project to get you started.
@@ -17,8 +18,8 @@ export const get = api(
   async ({ name }: { name: string }): Promise<Response> => {
     const msg = `Hello ${name}!`;
     return {
-      status: "encore is working",
-      message: msg,
+      status: "REST API is working",
+      message: `${formattedDate()}: ${msg}`,
     };
   }
 );

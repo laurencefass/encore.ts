@@ -1,14 +1,43 @@
 version: '3'
 
 services:
-  encoredev:
+  encorechat:
     image: syntapse/encore:bullseye
-    hostname: encoredev 
-    container_name: encoredev
+    hostname: encorechat
+    container_name: encorechat
     ports:
-      - "4000:4000"
-      - "9400:9401" # socat TCP-LISTEN:9401,reuseaddr,fork TCP:127.0.0.1:9400
+      - "4003:4003"
+      - "9403:9403"
     volumes:
-      - ./app:/app
-    working_dir: /app/helloworld
-    command: sh -c "export PATH=\$PATH:/root/.encore/bin && encore run --listen 0.0.0.0:4000 & socat TCP-LISTEN:9401,reuseaddr,fork TCP:127.0.0.1:9400"
+      - ./apps:/apps
+    working_dir: /apps/chat
+    # command: tail -f /dev/null
+    command: sh -c "export PATH=\$PATH:/root/.encore/bin && encore run --listen 0.0.0.0:4003 & socat TCP-LISTEN:9403,reuseaddr,fork TCP:127.0.0.1:9400"
+
+  # uses database so includes socker CLI and socket
+  encorepubsub:
+    image: syntapse/encore:withdocker
+    hostname: encorepubsub
+    container_name: encorepubsub
+    network_mode: "host"
+    ports:
+      - "4002:4002"
+      - "9402:9402"
+    volumes:
+      - ./apps:/apps
+    working_dir: /apps/pubsub
+    # command: tail -f /dev/null
+    command: sh -c "export PATH=\$PATH:/root/.encore/bin && encore run --listen 0.0.0.0:4002 & socat TCP-LISTEN:9402,reuseaddr,fork TCP:127.0.0.1:9400"
+
+  encorehello:
+    image: syntapse/encore:bullseye
+    hostname: encorehello 
+    container_name: encorehello
+    ports:
+      - "4001:4001"
+      - "9401:9401" 
+    volumes:
+      - ./apps:/apps
+    working_dir: /apps/helloworld
+    # command: tail -f /dev/null
+    command: sh -c "export PATH=\$PATH:/root/.encore/bin && encore run --listen 0.0.0.0:4001 & socat TCP-LISTEN:9401,reuseaddr,fork TCP:127.0.0.1:9400"

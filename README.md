@@ -4,15 +4,24 @@ Encore is an incredibly fast TS backend using a multi-threaded Rust core with ru
 
 [Umatched Node Performance powered by Rust](https://encore.dev/blog/encore-for-typescript#unmatched-node-performance-powered-by-rust)
 
-## notes
+## general notes
 
 - I wanted to try encore.ts without installing onto my host server
 - This has been simply achieved with a dockerfile and a docker-compose
 - encore runs a service and a dashboard - by default it runs processes on 127.0.0.0 which is not exposed to docker.
-- "encore run --listen 0.0.0.0:4000" is used to expose the service
+- Run encore with "encore run --listen 0.0.0.0:400x" to expose the service
 - the dahboard address is not configurable see [github issue](https://github.com/encoredev/encore/issues/1490)
 - as a workaround (preinstalled) socat is used to expose the dashboard to docker.
-- runs automatically on startup - just build the docker image and run the compose file
+- Once built encore runs automatically on startup - just build the docker image and run the compose file
+
+## Remote development and VSCode integration
+
+- I develop code on a remote VPS using docker and remote extensions
+- This is a partially containerised development environment using bind mounts
+- Encore installs its own library encore.dev as a symlink to a folder in /root.
+- Typescript module resolution wont work for /node_modules/encore.dev by connecting to remote host.
+- To get full Typescript module resolution run the container and connect to running container through VSCode.
+- Remember to map exposed docker ports on your remote machine in VScode (next to terminal tab) to access on your local browser
 
 ## note on encore/gc requirements
 
